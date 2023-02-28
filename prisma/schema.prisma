@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fieldReference", "clientExtensions"]
+  binaryTargets   = ["native"]
+}
+
+model User {
+  uid        Int     @id @default(autoincrement())
+  username   String  @unique
+  password   String
+  // firstName String
+  // lastName  String
+  // fullName  String
+  isTeacher  Boolean @default(false)
+  classes    Class[]
+  enrolled   Class[] @relation("StudentsClasses")
+  waitlisted Class[] @relation("StudentsWaitlists")
+  saved      Class[] @relation("StudentsCarts")
+}
+
+model Class {
+  uid         Int      @id @default(autoincrement())
+  id          String   @unique
+  name        String
+  teacher     User     @relation(fields: [teacherUid], references: [uid])
+  teacherUid  Int
+  description String
+  enrolled    User[]   @relation("StudentsClasses")
+  waitlisted  User[]   @relation("StudentsWaitlists")
+  saved       User[]   @relation("StudentsCarts")
+  start       DateTime // or String
+  end         DateTime // or String
+  days        String // e.g. “Mon,Tue,Wed,Thu,Fri,Sat,Sun”
+}

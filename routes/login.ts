@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction, RequestHandler } from "express"
-import { prisma, studentQuery, teacherQuery } from "../prisma"
+import { prisma, queryStudent, queryTeacher } from "../prisma"
 
 const router = Router()
 

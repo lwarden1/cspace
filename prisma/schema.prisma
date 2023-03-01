@@ -28,15 +28,22 @@ model User {
 
 model Class {
   uid         Int      @id @default(autoincrement())
-  id          String   @unique
-  name        String
+  department  Int
+  number      Int
+  section     Int
+  title       String
   teacher     User     @relation(fields: [teacherUid], references: [uid])
   teacherUid  Int
   description String
+  prereqs     String
+  credits     Int
+  capacity    Int
+  status      Int      @default(0) // 0 = open, 1 = closed, 2 = waitlist
   enrolled    User[]   @relation("StudentsClasses")
   waitlisted  User[]   @relation("StudentsWaitlists")
   saved       User[]   @relation("StudentsCarts")
-  start       DateTime // or String
-  end         DateTime // or String
-  days        String // e.g. “Mon,Tue,Wed,Thu,Fri,Sat,Sun”
+  start       DateTime // the first day of class & the time the class starts, e.g. “2021-01-01 08:30:00”
+  end         DateTime // the last day of class & the time the class ends, e.g. “2021-05-01 09:20:00”
+  days        String // the days of the week the class is held, e.g. “Mon,Tue,Wed,Thu,Fri”
+  location    String // the location of the class, e.g. “Online” | “TBD” | “Building 1 Room 123”
 }

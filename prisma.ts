@@ -3,8 +3,11 @@ import { PrismaClient, Prisma } from '@prisma/client';
 /** Our PrismaClient */
 export const prisma = new PrismaClient();
 
+export const ValidUserQuery = Prisma.validator<Prisma.UserArgs>()
+export const ValidClassQuery = Prisma.validator<Prisma.ClassArgs>()
+
 /** get Prisma UserPreview */
-export const userPreviewQuery = Prisma.validator<Prisma.UserArgs>()({
+export const queryUserPreview = ValidUserQuery({
     select: {
         uid: true,
         username: true
@@ -12,51 +15,84 @@ export const userPreviewQuery = Prisma.validator<Prisma.UserArgs>()({
 });
 
 /** get Prisma ClassPreview */
-export const classPreviewQuery = Prisma.validator<Prisma.ClassArgs>()({
+export const queryClassPreview = ValidClassQuery({
     select: {
         uid: true,
-        name: true,
-        description: true,
+        department: true,
+        number: true,
+        section: true,
+        title: true,
+        credits: true,
+        status: true,
         start: true,
         end: true,
         days: true,
-        teacher: userPreviewQuery
+        location: true,
+        teacher: queryUserPreview
     }
 });
 
 /** get Prisma ExtendedClassPreview */
-export const extendedClassPreviewQuery = Prisma.validator<Prisma.ClassArgs>()({
+export const queryTeacherClassPreview = ValidClassQuery({
     select: {
         uid: true,
-        name: true,
-        description: true,
+        department: true,
+        number: true,
+        section: true,
+        title: true,
+        credits: true,
+        status: true,
         start: true,
         end: true,
         days: true,
-        enrolled: userPreviewQuery,
-        waitlisted: userPreviewQuery
+        location: true,
+        enrolled: queryUserPreview,
+        waitlisted: queryUserPreview
+    }
+});
+
+/** get Prisma ClassDescription */
+export const queryClassDescription = ValidClassQuery({
+    select: {
+        uid: true,
+        department: true,
+        number: true,
+        section: true,
+        title: true,
+        description: true,
+        prereqs: true,
+        credits: true,
     }
 });
 
 /** get Prisma User with student fields, assuming User is valid */
-export const studentQuery = Prisma.validator<Prisma.UserArgs>()({
+export const queryStudent = ValidUserQuery({
     select: {
         uid: true,
         username: true,
-        enrolled: classPreviewQuery,
-        waitlisted: classPreviewQuery,
-        saved: classPreviewQuery
+        enrolled: queryClassPreview,
+        waitlisted: queryClassPreview,
+        saved: queryClassPreview
     }
 });
 
 
 /** get Prisma User with teacher fields, assuming User is valid */
-export const teacherQuery = Prisma.validator<Prisma.UserArgs>()({
+export const queryTeacher = ValidUserQuery({
     select: {
         uid: true,
         username: true,
-        classes: extendedClassPreviewQuery
+        classes: queryTeacherClassPreview
     }
 });
+
+declare global {
+    type UserPreview = Prisma.UserGetPayload<typeof queryUserPreview>;
+    type ClassPreview = Prisma.ClassGetPayload<typeof queryClassPreview>;
+    type TeacherClassPreview = Prisma.ClassGetPayload<typeof queryTeacherClassPreview>;
+    type ClassDescription = Prisma.ClassGetPayload<typeof queryClassDescription>;
+    type Student = Prisma.UserGetPayload<typeof queryStudent>;
+    type Teacher = Prisma.UserGetPayload<typeof queryTeacher>;
+}
 
 export default prisma;

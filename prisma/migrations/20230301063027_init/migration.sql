@@ -9,13 +9,20 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Class" (
     "uid" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "department" INTEGER NOT NULL,
+    "number" INTEGER NOT NULL,
+    "section" INTEGER NOT NULL,
+    "title" TEXT NOT NULL,
     "teacherUid" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
+    "prereqs" TEXT NOT NULL,
+    "credits" INTEGER NOT NULL,
+    "capacity" INTEGER NOT NULL,
+    "status" INTEGER NOT NULL DEFAULT 0,
     "start" DATETIME NOT NULL,
     "end" DATETIME NOT NULL,
     "days" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
     CONSTRAINT "Class_teacherUid_fkey" FOREIGN KEY ("teacherUid") REFERENCES "User" ("uid") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -45,9 +52,6 @@ CREATE TABLE "_StudentsCarts" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Class_id_key" ON "Class"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_StudentsClasses_AB_unique" ON "_StudentsClasses"("A", "B");

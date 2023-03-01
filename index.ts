@@ -1,3 +1,4 @@
+import './prisma'
 import { env } from 'process'
 import cookieSession from 'cookie-session'
 import express from 'express'
@@ -11,12 +12,12 @@ const port = env.PORT ? Number.parseInt(env.PORT) : 3000
 
 // set up cookie session
 app.use(cookieSession({
-    secret: env.SECRET,
+    secret: env.SECRET || 'secret',
     // Cookie Options
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
 
-export const utils = require('./utils')
+const utils = require('./utils')
 
 const routes = require('./routes')
 

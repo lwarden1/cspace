@@ -42,8 +42,17 @@ model Class {
   enrolled    User[]   @relation("StudentsClasses")
   waitlisted  User[]   @relation("StudentsWaitlists")
   saved       User[]   @relation("StudentsCarts")
+  semester    Semester @relation(fields: [semesterUid], references: [uid])
+  semesterUid Int
   start       DateTime // the first day of class & the time the class starts, e.g. “2021-01-01 08:30:00”
   end         DateTime // the last day of class & the time the class ends, e.g. “2021-05-01 09:20:00”
   days        String // the days of the week the class is held, e.g. “Mon,Tue,Wed,Thu,Fri”
   location    String // the location of the class, e.g. “Online” | “TBD” | “Building 1 Room 123”
+}
+
+model Semester {
+  uid     Int     @id @default(autoincrement())
+  year    Int
+  season  Int
+  classes Class[]
 }

@@ -19,11 +19,20 @@ CREATE TABLE "Class" (
     "credits" INTEGER NOT NULL,
     "capacity" INTEGER NOT NULL,
     "status" INTEGER NOT NULL DEFAULT 0,
+    "semesterUid" INTEGER NOT NULL,
     "start" DATETIME NOT NULL,
     "end" DATETIME NOT NULL,
     "days" TEXT NOT NULL,
     "location" TEXT NOT NULL,
-    CONSTRAINT "Class_teacherUid_fkey" FOREIGN KEY ("teacherUid") REFERENCES "User" ("uid") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Class_teacherUid_fkey" FOREIGN KEY ("teacherUid") REFERENCES "User" ("uid") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Class_semesterUid_fkey" FOREIGN KEY ("semesterUid") REFERENCES "Semester" ("uid") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Semester" (
+    "uid" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "year" INTEGER NOT NULL,
+    "season" INTEGER NOT NULL
 );
 
 -- CreateTable

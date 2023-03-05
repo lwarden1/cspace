@@ -8,7 +8,7 @@ interface CookieSessionObject extends CookieSessionInterfaces.CookieSessionObjec
     /**
      * The session user data.
      */
-    user?: User | null | undefined;
+    user?: SessionUser | null | undefined;
 }
 
 // augment the express module

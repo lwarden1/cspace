@@ -1,10 +1,6 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-
-/** Our PrismaClient */
-export const prisma = new PrismaClient();
-
-export const ValidUserQuery = Prisma.validator<Prisma.UserArgs>()
-export const ValidClassQuery = Prisma.validator<Prisma.ClassArgs>()
+import { Prisma } from '@prisma/client';
+const ValidUserQuery = Prisma.validator<Prisma.UserArgs>()
+const ValidClassQuery = Prisma.validator<Prisma.ClassArgs>()
 
 /** get Prisma UserPreview */
 export const queryUserPreview = ValidUserQuery({
@@ -28,7 +24,7 @@ export const queryClassPreview = ValidClassQuery({
         end: true,
         days: true,
         location: true,
-        teacher: queryUserPreview
+        teacher: queryUserPreview,
     }
 });
 
@@ -42,6 +38,7 @@ export const queryTeacherClassPreview = ValidClassQuery({
         title: true,
         credits: true,
         status: true,
+        capacity: true,
         start: true,
         end: true,
         days: true,
@@ -93,6 +90,14 @@ declare global {
     type ClassDescription = Prisma.ClassGetPayload<typeof queryClassDescription>;
     type Student = Prisma.UserGetPayload<typeof queryStudent>;
     type Teacher = Prisma.UserGetPayload<typeof queryTeacher>;
+    type User = { isTeacher: boolean } & (Student | Teacher);
+    type SessionUser = {
+        uid: number;
+        username: string;
+        isTeacher: boolean;
+        classes?: TeacherClassPreview[];
+        enrolled?: ClassPreview[];
+        waitlisted?: ClassPreview[];
+        saved?: ClassPreview[];
+    }
 }
-
-export default prisma;

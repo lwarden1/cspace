@@ -6,9 +6,9 @@
   "private": true,
   "scripts": {
     "start": "cross-env-shell NODE_ENV=production \"vite build && ts-node -T ./server/src/index.ts\"",
-    "dev": "ts-node-dev --transpileOnly -- ./server/src/index.ts",
+    "dev": "ts-node-dev --transpile-only -- ./server/src/index.ts",
     "watch:client": "vite build --watch",
-    "build:client": "vite build",
+    "build:client": "cd ./client && vite build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prisma:regen": "node ./scripts/prisma.delete && prisma migrate dev --name init",
     "types": "tsc -p tsconfig.types.json"

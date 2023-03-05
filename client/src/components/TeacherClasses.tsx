@@ -1,6 +1,6 @@
 import React from "react";
-import styles from './assets/Schedule.module.css';
-import { fmtTime } from "../utils";
+import styles from '@css/Schedule.module.css';
+import { fmtTime } from "@/utils";
 
 function classTitle(cls: TeacherClassPreview) {
     const departments = ["CSCI", "BUSN", "LIT"];

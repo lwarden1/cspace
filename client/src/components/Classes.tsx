@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouteLoaderData } from 'react-router-dom';
-import StudentClasses from './StudentClasses';
-import TeacherClasses from './TeacherClasses';
+import StudentClasses from '@components/StudentClasses';
+import TeacherClasses from '@components/TeacherClasses';
 
 export default function Classes() {
   const user = useRouteLoaderData("app") as SessionUser;

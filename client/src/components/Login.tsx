@@ -1,24 +1,26 @@
 import React from 'react'
-import styles from './assets/Login.module.css';
-import { axios } from '../axios';
+import styles from '@css/Login.module.css';
+import { axios } from '@/axios';
 import { redirect, Form, ActionFunction, Link } from 'react-router-dom';
-import { zUser, zodObjErrMsg, zUsername, zPassword, dynFieldOnChange } from '../utils';
+import { zUser, zodObjErrMsg, zUsername, zPassword, dynFieldOnChange } from '@/utils';
 
 // maybe use react-hook-form or something in the future
 export const loginAction: ActionFunction = async ({ request }) => {
     // You could keep track of field validity with onChange, but we might as well just validate the whole form just in case
-    const v = await zUser.safeParse(request.formData);
+    const v = await request.formData().then((d) => zUser.safeParse(d));
     if (!v.success) {
+        console.log(`login failed: ${v.error}`)
         document.getElementById('form_error')!.innerText = zodObjErrMsg(v.error);
         return null;
     }
-    const status = await axios.post('/login', v.data).then((r) => r.status)
-    if (!(status >= 200 && status < 300)) {
+    return await axios.post('/login', v.data).then((r) => {
+        return redirect('/');
+    }).catch((err) => {
         console.log('login failed')
+        console.error(err);
         document.getElementById('form_error')!.innerText = 'Username or password is incorrect';
         return null;
-    }
-    return redirect('/');
+    })
 }
 
 
@@ -29,7 +31,7 @@ export default function Login() {
         <div className={styles['auth__form-container']}>
             <div className={styles['auth__form-container_fields']}>
                 <div className={styles['auth__form-container_fields-content']}>
-                    <p>Sign In</p>
+                    <p>Login</p>
                     <Form method="post">
                         <div className={styles["auth__form-container_fields-content_input"]}>
                             <label htmlFor="username">Username</label>
@@ -57,12 +59,12 @@ export default function Login() {
                             />
                             <p style={{ fontSize: 12, color: 'red' }}>{errPassword}</p>
                         </div>
-                        <p id='form_error'></p>
+                        <p id='form_error' style={{ fontSize: 12, color: 'red' }}></p>
                         <div className={`${styles['auth__form-container_fields-content_button']} button`}>
-                            <button type="submit">Submit</button>
+                            <button type="submit">Login</button>
                         </div>
                         <div>
-                            <Link to="/register">Don't have an account? Register here.</Link>
+                            <Link to="/register">Don't have an account? Click here to register.</Link>
                         </div>
                     </Form>
                 </div>

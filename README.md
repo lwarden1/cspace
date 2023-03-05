@@ -1,5 +1,7 @@
 # CSpace
 
+An Express server with a React client, all in one repo.
+
 ## Commands
 
 - Start the application in development mode - `npm run dev`
@@ -17,12 +19,14 @@ Using vite for building because we need to offset the **amazingness** of React s
 
 Basic Express server with a few middleware packages. We definitely couldn't use ejs because it's **definitely** not the best templating engine for the job.
 
+Literally just serving the client files and the API.
+
 ## Database
 
 Using Prisma because it's **definitely** not overkill for this project 😊.
 
-Using SQLite to keep things as simple as possible.
+Using SQLite to keep things as simple as possible and to maybe *not* use an external database 😊.
 
 ## Authentication
 
-Literally just a cookie-session cookie.
+Literally just a cookie-session cookie, no security whatsoever 😊.

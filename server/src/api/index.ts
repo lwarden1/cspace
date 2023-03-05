@@ -13,42 +13,32 @@ const validUserForm = validateForm(z.object({
 
 const router = Router();
 
-router.use('/login', [parseJson, validUserForm], async (req: Request, res: Response) => {
+router.post('/login', [parseJson, validUserForm], async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    const _user = await prisma.user.findUnique({ where: { username } });
-    if (!_user || _user.password !== password) { return res.sendStatus(418); }
-    req.session!.user = _user.isTeacher ? {
-        ...(await prisma.user.findUnique({
-            ...queryTeacher,
-            where: {
-                uid: _user.uid
-            }
-        }) as Teacher), isTeacher: true
-    } : {
-        ...(await prisma.user.findUnique({
-            ...queryStudent,
-            where: {
-                uid: _user.uid
-            }
-        }) as Student), isTeacher: false
-    };
-    return res.sendStatus(200);
+    const user = await prisma.user.findUnique({ where: { username } });
+    if (!user || user.password !== password) {
+        res.sendStatus(401);
+    } else {
+        if (user.isTeacher) {
+            const teacher = await prisma.user.findUnique({ ...queryTeacher, where: { uid: user.uid } }) as Teacher;
+            req.session!.user = { ...teacher, isTeacher: true }
+        } else {
+            const student = await prisma.user.findUnique({ ...queryStudent, where: { uid: user.uid } }) as Student;
+            req.session!.user = { ...student, isTeacher: false }
+        }
+        res.sendStatus(200);
+    }
 })
 
-router.use('/logout', async (req: Request, res: Response) => {
+router.post('/logout', async (req: Request, res: Response) => {
     req.session = null;
-    return res.sendStatus(200);
+    res.sendStatus(200);
 })
 
-router.use('/register', [parseJson, validUserForm], async (req: Request, res: Response) => {
-    const { username, password } = req.body;
-    const _user = await prisma.user.findUnique({ where: { username } });
-    if (_user) { return res.sendStatus(409); }
-    await prisma.user.create({ data: { username, password } }).catch((err) => {
-        res.sendStatus(409);
-        throw err;
-    });
-    return res.sendStatus(200);
+router.post('/register', [parseJson, validUserForm], async (req: Request, res: Response) => {
+    // handlePrismaError will catch any errors thrown by prisma
+    await prisma.user.create({ data: req.body })
+    res.sendStatus(200)
 })
 
 // ... other routes

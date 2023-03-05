@@ -11,8 +11,8 @@ import {
 import axios from 'axios';
 import App from './App';
 import ErrorPage from './err';
-import Classes from './components/Classes';
-import Login, { loginAction } from './components/Login';
+import Classes from '@components/Classes';
+import Login, { loginAction } from '@components/Login';
 
 const instance = axios.create({
     baseURL: 'http://localhost:3000/api/',

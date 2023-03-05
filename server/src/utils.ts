@@ -26,8 +26,12 @@ export const handlePrismaError: ErrorRequestHandler = (err: any, req: Request, r
             console.error(`[${req.baseUrl}] [Prisma]: ${err.message}`);
             throw err;
         }
+        // Otherwise, log the error and send a 400 response
+        console.log(`[${req.originalUrl}] [${req.baseUrl}]: Prisma ${err.code}`);
+        res.sendStatus(400);
+    } else {
+        next(err);
     }
-    next(err);
 };
 
 export function validateForm(form: z.AnyZodObject): RequestHandler {

@@ -1,10 +1,11 @@
 # CSpace
 
-An Express server with a React client, all in one repo.
+An Express server with a React client, all in one repo with typescript.
 
 ## Commands
 
-- Start the application in development mode - `npm run dev`
+- Install all dependencies - `npm i`
+- Start the application in development mode (with hot reload) - `npm run dev`
 - Start the application in production mode - `npm start`
 - Regenerate the Prisma client - `npm run prisma:regen`
 - Regenerate the global types - `npm run types`
